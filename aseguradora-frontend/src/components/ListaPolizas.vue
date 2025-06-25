@@ -30,8 +30,8 @@
             <td class="px-5 py-5 border-b border-gray-200 bg-white text-sm">{{ poliza.tipoSeguro }}</td>
             <td class="px-5 py-5 border-b border-gray-200 bg-white text-sm">${{ poliza.monto.toLocaleString() }}</td>
             <td class="px-5 py-5 border-b border-gray-200 bg-white text-sm">
-
-                <button @click="$emit('editar-poliza', poliza)" class="text-blue-600 hover:text-blue-900">Editar</button>
+              <button @click="$emit('editar-poliza', poliza)" class="text-blue-600 hover:text-blue-900">Editar</button>
+              <button @click="eliminarPoliza(poliza._id)" class="ml-4 text-red-600 hover:text-red-900">Eliminar</button>
             </td>
           </tr>
         </tbody>
@@ -45,7 +45,7 @@
 import { ref, onMounted } from 'vue'
 import axios from 'axios'
 
-defineEmits(['editar-poliza'])
+const emit = defineEmits(['editar-poliza', 'poliza-eliminada'])
 
 const polizas = ref([])
 const mensaje = ref('Cargando pólizas...')
@@ -58,6 +58,19 @@ const obtenerPolizas = async () => {
   } catch (error) {
     console.error(error)
     mensaje.value = 'Error al cargar las pólizas.'
+  }
+}
+
+const eliminarPoliza = async (id) => {
+  if (!confirm('¿Estás seguro de que deseas eliminar esta póliza?')) {
+    return;
+  }
+  try {
+    await axios.delete(`http://localhost:4000/api/polizas/${id}`)
+    emit('poliza-eliminada')
+  } catch (error) {
+    console.error(error);
+    alert('Error al eliminar la póliza.');
   }
 }
 

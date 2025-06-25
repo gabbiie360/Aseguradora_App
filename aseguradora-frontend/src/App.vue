@@ -8,10 +8,10 @@
         @edicion-cancelada="limpiarEdicion"
       />
 
-      <!-- Componente para listar las pólizas -->
       <ListaPolizas 
         :key="listaKey"
         @editar-poliza="prepararEdicion"
+        @poliza-eliminada="recargarLista" 
       />
     </div>
   </main>
@@ -27,12 +27,12 @@ const polizaEnEdicion = ref(null)
 
 const prepararEdicion = (poliza) => {
   polizaEnEdicion.value = poliza
-  window.scrollTo(0, 0) 
+  window.scrollTo(0, 0)
 }
 
 const recargarLista = () => {
   limpiarEdicion()
-  listaKey.value++ 
+  listaKey.value++
 }
 
 const limpiarEdicion = () => {
